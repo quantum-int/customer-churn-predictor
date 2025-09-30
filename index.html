@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Prediction Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <span>ChurnPredict</span>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <button class="nav-link active" data-view="dashboard">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-view="predict">
+                        <i class="fas fa-crystal-ball"></i>
+                        <span>Predict Churn</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-view="customers">
+                        <i class="fas fa-users"></i>
+                        <span>Customer List</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-view="analytics">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-view="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view active">
+                <header class="page-header">
+                    <div class="header-content">
+                        <h1>Customer Churn Prediction Dashboard</h1>
+                        <div class="header-meta">
+                            <span id="current-date"></span>
+                            <button class="btn btn--secondary btn--sm">
+                                <i class="fas fa-download"></i>
+                                Export Report
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Key Metrics Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">2,000</div>
+                            <div class="metric-label">Total Active Customers</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">24.3%</div>
+                            <div class="metric-label">Average Churn Risk</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon danger">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">$45,670</div>
+                            <div class="metric-label">Monthly Revenue at Risk</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon danger">
+                            <i class="fas fa-user-times"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">234</div>
+                            <div class="metric-label">High Risk Customers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-row">
+                        <div class="chart-container">
+                            <h3>Risk Distribution</h3>
+                            <div style="position: relative; height: 300px;">
+                                <canvas id="riskChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Monthly Churn Trends</h3>
+                            <div style="position: relative; height: 300px;">
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-row">
+                        <div class="chart-container full-width">
+                            <h3>Customer Demographics Analysis</h3>
+                            <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/f75e3e5a2730ece2567c4c52cce7a0f9/31ebba29-7ecf-4984-9446-a6416b733b67/2f9a22c0.png" alt="Customer Demographics Analysis" class="analytics-chart">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High Risk Customers Table -->
+                <div class="high-risk-section">
+                    <div class="section-header">
+                        <h3>High Risk Customers</h3>
+                        <button class="btn btn--primary btn--sm">
+                            <i class="fas fa-plus"></i>
+                            Take Action
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="highRiskTable">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Name</th>
+                                    <th>Risk Level</th>
+                                    <th>Monthly Bill</th>
+                                    <th>Last Activity</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="highRiskTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predict Churn View -->
+            <div id="predict-view" class="view">
+                <header class="page-header">
+                    <h1>Customer Churn Prediction</h1>
+                    <p>Enter customer details to get real-time churn probability prediction</p>
+                </header>
+
+                <div class="prediction-layout">
+                    <div class="prediction-form">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Customer Information</h3>
+                            </div>
+                            <div class="card__body">
+                                <form id="predictionForm">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">Age</label>
+                                            <input type="number" class="form-control" name="age" min="18" max="100" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Gender</label>
+                                            <select class="form-control" name="gender" required>
+                                                <option value="">Select Gender</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">Monthly Bill ($)</label>
+                                            <input type="number" class="form-control" name="monthlyBill" min="0" step="0.01" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Contract Type</label>
+                                            <select class="form-control" name="contractType" required>
+                                                <option value="">Select Contract</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="One Year">One Year</option>
+                                                <option value="Two Year">Two Year</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">Subscription Length (months)</label>
+                                            <input type="number" class="form-control" name="subscriptionLength" min="1" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Credit Score</label>
+                                            <input type="number" class="form-control" name="creditScore" min="300" max="850" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Satisfaction Score: <span id="satisfactionValue">5</span></label>
+                                        <input type="range" class="form-control range-input" name="satisfaction" min="1" max="10" value="5" oninput="document.getElementById('satisfactionValue').textContent = this.value">
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">Service Calls (last 3 months)</label>
+                                            <input type="number" class="form-control" name="serviceCalls" min="0" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Days Since Last Activity</label>
+                                            <input type="number" class="form-control" name="daysSinceActivity" min="0" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="services-section">
+                                        <label class="form-label">Services</label>
+                                        <div class="checkbox-grid">
+                                            <label class="checkbox-item">
+                                                <input type="checkbox" name="services" value="phone">
+                                                <span>Phone Service</span>
+                                            </label>
+                                            <label class="checkbox-item">
+                                                <input type="checkbox" name="services" value="internet">
+                                                <span>Internet</span>
+                                            </label>
+                                            <label class="checkbox-item">
+                                                <input type="checkbox" name="services" value="streaming">
+                                                <span>Streaming</span>
+                                            </label>
+                                            <label class="checkbox-item">
+                                                <input type="checkbox" name="services" value="security">
+                                                <span>Security</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn--primary btn--full-width">
+                                        <i class="fas fa-magic"></i>
+                                        Predict Churn Risk
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prediction-results">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Prediction Results</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="predictionOutput">
+                                    <div class="empty-state">
+                                        <i class="fas fa-chart-line"></i>
+                                        <p>Fill out the form to see churn prediction results</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer List View -->
+            <div id="customers-view" class="view">
+                <header class="page-header">
+                    <div class="header-content">
+                        <h1>Customer Management</h1>
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search customers..." id="customerSearch">
+                            </div>
+                            <select class="form-control" id="riskFilter">
+                                <option value="">All Risk Levels</option>
+                                <option value="High">High Risk</option>
+                                <option value="Medium">Medium Risk</option>
+                                <option value="Low">Low Risk</option>
+                            </select>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="table-container">
+                    <table class="data-table" id="customerTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th>Customer ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Monthly Bill</th>
+                                <th>Risk Level</th>
+                                <th>Satisfaction</th>
+                                <th>Last Activity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-footer">
+                    <div class="bulk-actions">
+                        <button class="btn btn--secondary" id="bulkActionBtn" disabled>
+                            <i class="fas fa-tasks"></i>
+                            Bulk Actions (0 selected)
+                        </button>
+                    </div>
+                    <div class="pagination">
+                        <button class="btn btn--outline btn--sm" id="prevPage" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span class="pagination-info">Page 1 of 10</span>
+                        <button class="btn btn--outline btn--sm" id="nextPage">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics View -->
+            <div id="analytics-view" class="view">
+                <header class="page-header">
+                    <h1>Advanced Analytics</h1>
+                    <p>Deep insights into churn patterns and model performance</p>
+                </header>
+
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <h3>Feature Importance Analysis</h3>
+                        <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/f75e3e5a2730ece2567c4c52cce7a0f9/34ab36eb-ec63-48bc-a710-b12afe9943d0/5dafe254.png" alt="ML Model Feature Importance" class="analytics-chart">
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Model Performance Metrics</h3>
+                        <div class="metrics-list">
+                            <div class="metric-item">
+                                <span class="metric-name">Accuracy</span>
+                                <span class="metric-value">87.3%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-name">Precision</span>
+                                <span class="metric-value">84.6%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-name">Recall</span>
+                                <span class="metric-value">89.1%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-name">F1-Score</span>
+                                <span class="metric-value">86.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-view" class="view">
+                <header class="page-header">
+                    <h1>Settings</h1>
+                    <p>Configure dashboard preferences and model parameters</p>
+                </header>
+
+                <div class="settings-grid">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3>Model Configuration</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="form-group">
+                                <label class="form-label">Risk Threshold</label>
+                                <select class="form-control">
+                                    <option value="0.7">70% (High Sensitivity)</option>
+                                    <option value="0.75" selected>75% (Recommended)</option>
+                                    <option value="0.8">80% (Conservative)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Notification Preferences</label>
+                                <div class="checkbox-grid">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" checked>
+                                        <span>Email Alerts</span>
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" checked>
+                                        <span>Dashboard Notifications</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

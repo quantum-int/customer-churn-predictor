@@ -1,0 +1,116 @@
+{
+  "feature_columns": [
+    "age",
+    "subscription_length_months",
+    "monthly_bill",
+    "total_usage_gb",
+    "customer_service_calls",
+    "satisfaction_score",
+    "last_payment_days_ago",
+    "last_login_days_ago",
+    "credit_score",
+    "support_tickets",
+    "avg_monthly_usage_growth",
+    "phone_service",
+    "multiple_lines",
+    "online_security",
+    "online_backup",
+    "device_protection",
+    "tech_support",
+    "streaming_tv",
+    "streaming_movies",
+    "paperless_billing",
+    "clv_estimate",
+    "services_count",
+    "high_value",
+    "new_customer",
+    "at_risk",
+    "contract_monthly",
+    "payment_electronic",
+    "internet_fiber"
+  ],
+  "model_type": "RandomForestClassifier",
+  "auc_score": 0.6179896750683267,
+  "feature_importance": [
+    {
+      "feature": "monthly_bill",
+      "importance": 0.11504157750978673
+    },
+    {
+      "feature": "clv_estimate",
+      "importance": 0.09146833420253228
+    },
+    {
+      "feature": "avg_monthly_usage_growth",
+      "importance": 0.08393607991216825
+    },
+    {
+      "feature": "total_usage_gb",
+      "importance": 0.0803645386104419
+    },
+    {
+      "feature": "credit_score",
+      "importance": 0.06758475018965414
+    },
+    {
+      "feature": "subscription_length_months",
+      "importance": 0.06692509633591066
+    },
+    {
+      "feature": "age",
+      "importance": 0.06499432109052901
+    },
+    {
+      "feature": "satisfaction_score",
+      "importance": 0.06184156001020395
+    },
+    {
+      "feature": "last_payment_days_ago",
+      "importance": 0.06164879642907927
+    },
+    {
+      "feature": "contract_monthly",
+      "importance": 0.05420955099142114
+    },
+    {
+      "feature": "last_login_days_ago",
+      "importance": 0.04240501317043582
+    },
+    {
+      "feature": "customer_service_calls",
+      "importance": 0.02830587796669249
+    },
+    {
+      "feature": "support_tickets",
+      "importance": 0.025481945757261218
+    },
+    {
+      "feature": "services_count",
+      "importance": 0.024099412270751477
+    },
+    {
+      "feature": "multiple_lines",
+      "importance": 0.012148506102456663
+    },
+    {
+      "feature": "online_security",
+      "importance": 0.011026407265196438
+    },
+    {
+      "feature": "internet_fiber",
+      "importance": 0.010997910186191284
+    },
+    {
+      "feature": "streaming_movies",
+      "importance": 0.010816308727411359
+    },
+    {
+      "feature": "online_backup",
+      "importance": 0.010353031117210365
+    },
+    {
+      "feature": "payment_electronic",
+      "importance": 0.01021784700216452
+    }
+  ]
+}
